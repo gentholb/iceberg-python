@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 # pylint: disable=W0123,W0613
+import copy
 import pickle
 from typing import Type
 
@@ -619,3 +620,18 @@ def test_types_singleton() -> None:
     assert id(BooleanType()) == id(BooleanType())
     assert id(FixedType(22)) == id(FixedType(22))
     assert id(FixedType(19)) != id(FixedType(25))
+
+def test_decimal_deepcopy() -> None:
+    """Test that deepcopy works for DecimalType"""
+    first_decimal_type = DecimalType(10, 2)
+    second_decimal_type = DecimalType(10, 3)
+    first_copy = copy.deepcopy(first_decimal_type)
+    second_copy = copy.deepcopy(second_decimal_type)
+
+    # The deepcopy should work even if the DecimalType is a singleton
+    assert first_decimal_type == first_copy
+    assert second_decimal_type == second_copy
+
+    # The deepcopy should not create a new instance, as DecimalType is a singleton
+    assert id(first_decimal_type) == id(first_copy)
+    assert id(second_decimal_type) == id(second_copy)
