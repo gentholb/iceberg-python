@@ -47,3 +47,7 @@ class Singleton:
         if key not in cls._instances:
             cls._instances[key] = super().__new__(cls)
         return cls._instances[key]
+
+    def __deepcopy__(self, memo=None):
+        """ We don't want to copy the object, we want to return the same object. """
+        return self
